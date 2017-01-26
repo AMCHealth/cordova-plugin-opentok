@@ -475,14 +475,18 @@ public class OpenTokAndroidPlugin extends CordovaPlugin implements
         Log.i( TAG, "unsubscribe command called");
         Log.i( TAG, "unsubscribe data: " + args.toString() );
         RunnableSubscriber runsub = subscriberCollection.get( args.getString(0) );
-        runsub.unsubscribe();
+        if( runsub != null ){
+          runsub.unsubscribe();
+        }
         videoStats = new JSONObject();
       }else if( action.equals( "subscribe" )){
         Log.i( TAG, "subscribe command called");
         Log.i( TAG, "subscribe data: " + args.toString() );
         Stream stream = streamCollection.get( args.getString(0) );
-        RunnableSubscriber runsub = new RunnableSubscriber( args, stream );
-        subscriberCollection.put(stream.getStreamId(), runsub);
+        if( stream != null ){
+          RunnableSubscriber runsub = new RunnableSubscriber( args, stream );
+          subscriberCollection.put(stream.getStreamId(), runsub);
+        }
       }else if( action.equals( "getstats" )){
         callbackContext.success(videoStats);
       }else if( action.equals( "updateView" )){
@@ -603,9 +607,11 @@ public class OpenTokAndroidPlugin extends CordovaPlugin implements
     triggerJSEvent( "sessionEvents", "connectionCreated", data);
   }
 
-  public void onConnectionDestroyed(Session arg0, Connection arg1) {Log.i(TAG, "connection dropped: " + arg1.getConnectionId());
+  public void onConnectionDestroyed(Session arg0, Connection arg1) {
+    Log.i(TAG, "connection dropped: " + arg1.getConnectionId());
 
-  connectionCollection.remove( arg1.getConnectionId() );
+    connectionCollection.remove( arg1.getConnectionId() );
+    
     JSONObject data= new JSONObject();
     try{
       JSONObject connection = createDataFromConnection( arg1 );
