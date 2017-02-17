@@ -176,7 +176,16 @@ public class OpenTokAndroidPlugin extends CordovaPlugin implements
           publisherName = "Android-Publisher";
         }
 
-        mPublisher = new Publisher(cordova.getActivity().getApplicationContext(), publisherName);
+        Publisher.CameraCaptureResolution resolution = Publisher.CameraCaptureResolution.MEDIUM;
+        Publisher.CameraCaptureFrameRate frameRate = Publisher.CameraCaptureFrameRate.FPS_30;
+        try{
+          resolution = Publisher.CameraCaptureResolution.valueOf(this.mProperty.getString(11));
+          frameRate = Publisher.CameraCaptureFrameRate.valueOf(this.mProperty.getString(12));
+        }catch( Exception e ){
+          Log.i(TAG, "error when trying to override default frameRate and resolution");
+        }
+        
+        mPublisher = new Publisher(cordova.getActivity().getApplicationContext(), publisherName, resolution, frameRate);
         mPublisher.setCameraListener(this);
         mPublisher.setPublisherListener(this);
         try{

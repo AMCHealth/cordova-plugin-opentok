@@ -302,7 +302,7 @@ TBPublisher = (function() {
     this.streamCreated = __bind(this.streamCreated, this);
     this.eventReceived = __bind(this.eventReceived, this);
     this.setSession = __bind(this.setSession, this);
-    var borderRadius, cameraName, height, name, obj, onError, onSuccess, position, publishAudio, publishVideo, ratios, width, zIndex, _ref, _ref1, _ref2, _ref3;
+    var borderRadius, cameraName, height, name, obj, onError, onSuccess, position, publishAudio, publishVideo, ratios, width, zIndex, _ref, _ref1, _ref2, _ref3, resolution, frameRate;
     if (targetElement == null) {
       this.domId = TBGenerateDomHelper();
       this.element = document.getElementById(this.domId);
@@ -333,6 +333,8 @@ TBPublisher = (function() {
       if ((properties.publishVideo != null) && properties.publishVideo === false) {
         publishVideo = "false";
       }
+      resolution = properties.resolution != null ? properties.resolution : "MEDIUM";
+      frameRate = properties.frameRate != null ? properties.frameRate : "FPS_30";
     }
     if ((width == null) || width === 0 || (height == null) || height === 0) {
       width = DefaultWidth;
@@ -357,7 +359,7 @@ TBPublisher = (function() {
       }
       return TBError(result);
     };
-    Cordova.exec(onSuccess, onError, OTPlugin, "initPublisher", [name, position.top, position.left, width, height, zIndex, publishAudio, publishVideo, cameraName, ratios.widthRatio, ratios.heightRatio, borderRadius]);
+    Cordova.exec(onSuccess, onError, OTPlugin, "initPublisher", [name, position.top, position.left, width, height, zIndex, publishAudio, publishVideo, cameraName, ratios.widthRatio, ratios.heightRatio, resolution, frameRate]);
     Cordova.exec(this.eventReceived, TBSuccess, OTPlugin, "addEvent", ["publisherEvents"]);
   }
 
